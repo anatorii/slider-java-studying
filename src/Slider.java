@@ -8,10 +8,7 @@ public class Slider extends JFrame {
     static int height = 600;
     static int clientWidth;
     static int clientHeight;
-    private JPanel panelUp;
-    private JPanel panelBottom;
-    private JLabel label;
-    private JSlider slider;
+    JLabel label;
 
     public Slider() {
         super("Slider");
@@ -22,45 +19,37 @@ public class Slider extends JFrame {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setPreferredSize(new Dimension(Slider.width, Slider.height));
+        this.setSize(Slider.width, Slider.height);
         this.setLocation(d.width / 2 - Slider.width / 2, d.height / 2 - Slider.height / 2);
-        this.getContentPane().setBackground(Color.lightGray);
-        this.setResizable(false);
-        this.setLayout(null);
+        this.getContentPane().setBackground(Color.orange);
+        this.setLocationRelativeTo(null);
+        this.setLayout(new BorderLayout());
 
-        JLabel label = new JLabel();
-        label.setText("label text");
-        label.setFont(new Font("Serif", Font.PLAIN, 50));
+        JPanel panelUp = new JPanel(new GridLayout());
+        panelUp.setPreferredSize(new Dimension(0, 100));
 
-        JSlider slider = new JSlider();
-        slider.setMinimum(1);
-        slider.setMaximum(100);
-        slider.setValue(20);
-        slider.setOpaque(true);
-        slider.setLayout(null);
+        JPanel panelDown = new JPanel(new GridBagLayout());
+        panelDown.setBackground(Color.green);
 
-
-        JPanel panelUp = new JPanel();
-        panelUp.setBackground(Color.orange);
-        panelUp.setLayout(new GridBagLayout());
+        JSlider slider = new JSlider(5, 100, 50);
+        slider.setFont(new Font("Courier", Font.PLAIN, 18));
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        slider.setMinorTickSpacing(1);
+        slider.setMajorTickSpacing(19);
+        slider.setForeground(Color.red);
+        slider.setBackground(Color.yellow);
         panelUp.add(slider);
-        getContentPane().add(panelUp);
 
-        JPanel panelBottom = new JPanel();
-        panelBottom.setBackground(Color.green);
-        panelBottom.setLayout(new GridBagLayout());
-        panelBottom.add(label);
-        getContentPane().add(panelBottom);
+        label = new JLabel("Slider");
+        label.setFont(new Font("Serif", Font.PLAIN, slider.getValue()));
+        label.setBackground(Color.white);
+        label.setOpaque(true);
+        panelDown.add(label);
 
-        this.pack();
+        this.add(panelUp, BorderLayout.NORTH);
+        this.add(panelDown, BorderLayout.CENTER);
         this.setVisible(true);
-
-        panelUp.setBounds(0, 0, Slider.clientWidth, 100);
-        panelBottom.setBounds(0, 100, Slider.clientWidth, Slider.clientHeight - 100);
-        slider.setFont(new Font("Serif", Font.PLAIN, 50));
-        slider.setBounds(0, 0, Slider.clientWidth, 100);
-        panelUp.revalidate();
-        panelUp.repaint();
 
         slider.addChangeListener(new ChangeListener() {
             @Override
@@ -71,7 +60,7 @@ public class Slider extends JFrame {
     }
 
     private void sliderChanged(ChangeEvent e) {
-        System.out.println(slider.getValue());
+        label.setFont(new Font("Serif", Font.PLAIN, ((JSlider)e.getSource()).getValue()));
     }
 
     public void setVisible(boolean b) {
